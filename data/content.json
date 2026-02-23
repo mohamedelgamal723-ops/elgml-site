@@ -1,0 +1,30 @@
+{
+  "site": {
+    "brand": "Elgml",
+    "lead": "معلق، صانع إعلانات ومُخرج أفلام باستخدام الذكاء الاصطناعي",
+    "email": "mohamedelgamal723@gmail.com"
+  },
+  "projects": [
+    {
+      "id": "project1",
+      "title": "مشروع مؤقت 1 — إعلان تجريبي",
+      "description": "إعلان قصير مؤقت كمثال. استبدل هذا الفيديو بعملك.",
+      "video": "videos/project1.mp4",
+      "poster": "videos/project1.jpg"
+    },
+    {
+      "id": "project2",
+      "title": "مشروع مؤقت 2 — مشهد قصير",
+      "description": "مشهد قصير مؤقت لعرض الشكل والمحتوى.",
+      "video": "videos/project2.mp4",
+      "poster": "videos/project2.jpg"
+    },
+    {
+      "id": "project3",
+      "title": "مشروع مؤقت 3 — حملة تجريبية",
+      "description": "حملة إعلانية مؤقتة كمثال للعرض.",
+      "video": "videos/project3.mp4",
+      "poster": "videos/project3.jpg"
+    }
+  ]
+}

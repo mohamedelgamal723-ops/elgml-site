@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>لوحة التحكم — Elgml</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .field{margin-bottom:10px}
+      label{display:block;margin-bottom:6px}
+      input[type=text], textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
+      .btn{display:inline-block;padding:8px 12px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>لوحة تحكم المحتوى (مؤقتة)</h2>
+      <p>يمكنك تعديل بيانات الموقع هنا ثم تنزيل ملف JSON لتدفعه إلى المستودع.</p>
+
+      <div id="site-meta" class="card">
+        <h4>بيانات الموقع</h4>
+        <div class="field"><label>اسم البراند</label><input id="brand" type="text"></div>
+        <div class="field"><label>جملة تعريفية</label><input id="lead" type="text"></div>
+        <div class="field"><label>بريد التواصل</label><input id="email" type="text"></div>
+      </div>
+
+      <div id="projects" class="card">
+        <h4>المشاريع</h4>
+        <div id="projects-list"></div>
+        <p><button id="add-project" class="btn">أضف مشروع جديد</button></p>
+      </div>
+
+      <p>
+        <button id="download-json" class="btn">تنزيل JSON جاهز للرفع</button>
+        <a href="index.html" class="btn" style="background:#333;margin-right:8px">عرض الموقع</a>
+      </p>
+    </div>
+
+    <script src="js/panel.js"></script>
+  </body>
+</html>
