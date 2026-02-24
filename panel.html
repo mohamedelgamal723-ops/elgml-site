@@ -597,6 +597,69 @@
         <button class="btn btn-primary" onclick="openProjectModal(null)" style="margin-top: 20px;">➕ أضف مشروع جديد</button>
       </div>
 
+      <!-- Services Section -->
+      <div class="panel-section">
+        <h2 class="section-title">✨ إدارة الخدمات</h2>
+        <div style="color:#ffbebe;font-size:0.92rem;margin-bottom:15px;">أضف أو عدّل الخدمات التي تقدمها.</div>
+        
+        <div id="services-list"></div>
+        <div class="empty-state" id="emptyServices" style="display:none;">
+          <div class="empty-state-icon">🎯</div>
+          <p>لا توجد خدمات حتى الآن</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openServiceModal(null)" style="margin-top: 20px;">➕ أضف خدمة جديدة</button>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="panel-section">
+        <h2 class="section-title">📊 إدارة الإحصائيات</h2>
+        <div style="color:#ffbebe;font-size:0.92rem;margin-bottom:15px;">أضف الأرقام والإحصائيات التي تريد عرضها.</div>
+        
+        <div id="stats-list"></div>
+        <div class="empty-state" id="emptyStats" style="display:none;">
+          <div class="empty-state-icon">📈</div>
+          <p>لا توجد إحصائيات حتى الآن</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openStatModal(null)" style="margin-top: 20px;">➕ أضف إحصائية جديدة</button>
+      </div>
+
+      <!-- Contact & Social Section -->
+      <div class="panel-section">
+        <h2 class="section-title">📱 بيانات التواصل والروابط الاجتماعية</h2>
+        <div style="color:#ffbebe;font-size:0.92rem;margin-bottom:15px;">حدّث معلومات التواصل والحسابات الاجتماعية.</div>
+        
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="contactEmail" placeholder="your@email.com">
+        </div>
+
+        <div class="field-row">
+          <div class="form-group">
+            <label>رقم WhatsApp</label>
+            <input type="text" id="contactWhatsapp" placeholder="201012345678">
+          </div>
+          <div class="form-group">
+            <label>حساب Instagram</label>
+            <input type="text" id="contactInstagram" placeholder="elgml.pro">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="form-group">
+            <label>حساب Twitter</label>
+            <input type="text" id="contactTwitter" placeholder="elgml_pro">
+          </div>
+          <div class="form-group">
+            <label>قناة YouTube</label>
+            <input type="text" id="contactYoutube" placeholder="elgml-channel">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveContactInfo()">💾 حفظ بيانات التواصل</button>
+      </div>
+
       <!-- Settings Section -->
       <div class="panel-section">
         <h2 class="section-title">⚙️ الإعدادات المتقدمة</h2>
@@ -744,6 +807,61 @@
       <div class="button-group">
         <button class="btn btn-primary" onclick="saveProject()">✓ حفظ المشروع</button>
         <button class="btn btn-secondary" onclick="closeProjectModal()">✕ إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Modal -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="serviceModalTitle">أضف خدمة جديدة</h2>
+        <button class="close-modal" onclick="closeServiceModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label>عنوان الخدمة</label>
+        <input type="text" id="serviceTitle" placeholder="مثال: تصميم إعلانات">
+      </div>
+
+      <div class="form-group">
+        <label>وصف الخدمة</label>
+        <textarea id="serviceDesc" placeholder="اكتب وصفاً للخدمة..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>أيقونة/رمز (Emoji)</label>
+        <input type="text" id="serviceIcon" placeholder="🎨" maxlength="4">
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="saveService()">✓ حفظ الخدمة</button>
+        <button class="btn btn-secondary" onclick="closeServiceModal()">✕ إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat Modal -->
+  <div class="modal-overlay" id="statModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="statModalTitle">أضف إحصائية جديدة</h2>
+        <button class="close-modal" onclick="closeStatModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label>الرقم</label>
+        <input type="text" id="statNumber" placeholder="500+">
+      </div>
+
+      <div class="form-group">
+        <label>التسمية/الوصف</label>
+        <input type="text" id="statLabel" placeholder="مشروع منجز">
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="saveStat()">✓ حفظ الإحصائية</button>
+        <button class="btn btn-secondary" onclick="closeStatModal()">✕ إلغاء</button>
       </div>
     </div>
   </div>

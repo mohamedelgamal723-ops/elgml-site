@@ -7,7 +7,7 @@
   },
   "settings": {
     "colors": {
-      "primary": "#ff6b6b",
+      "primary": "#ffb347",
       "secondary": "#4ecdc4",
       "dark": "#0a0e27"
     },
@@ -28,6 +28,23 @@
       "portfolioTitle": "أحدث الأعمال",
       "contactTitle": "تواصل معي"
     },
+    "contact": {
+      "email": "mohamedelgamal723@gmail.com",
+      "whatsapp": "201012345678",
+      "instagram": "elgml.pro",
+      "twitter": "elgml_pro",
+      "youtube": "elgml-channel"
+    },
+    "stats": [
+      {
+        "number": "500+",
+        "label": "مشروع منجز"
+      },
+      {
+        "number": "100+",
+        "label": "عميل راضٍ"
+      }
+    ],
     "features": {
       "show3dBackground": true,
       "showStats": true,
@@ -57,6 +74,26 @@
       "description": "حملة إعلانية مؤقتة كمثال للعرض.",
       "video": "videos/project3.mp4",
       "poster": "videos/project3.jpg"
+    }
+  ],
+  "services": [
+    {
+      "id": "s1",
+      "title": "تصميم الإعلانات",
+      "description": "تصميم إعلانات متحركة واحترافية لعلامتك التجارية",
+      "icon": "🎨"
+    },
+    {
+      "id": "s2",
+      "title": "إنتاج الفيديو",
+      "description": "إنتاج محترف للفيديوهات والمحتوى البصري",
+      "icon": "🎥"
+    },
+    {
+      "id": "s3",
+      "title": "الذكاء الاصطناعي",
+      "description": "استخدام تقنيات الذكاء الاصطناعي في الإنتاج",
+      "icon": "🤖"
     }
   ]
 }

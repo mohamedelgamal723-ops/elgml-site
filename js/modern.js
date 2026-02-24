@@ -55,6 +55,63 @@ document.addEventListener('DOMContentLoaded', function() {
             `).join('');
           }
         }
+        // Services
+        if (data.settings && data.settings.services && Array.isArray(data.settings.services)) {
+          const servicesGrid = document.getElementById('services-grid');
+          if (servicesGrid) {
+            servicesGrid.innerHTML = data.settings.services.map(s => `
+              <div class="ai-service-card">
+                <div class="ai-service-icon">${s.icon || '✨'}</div>
+                <h3>${s.title}</h3>
+                <p>${s.description}</p>
+              </div>
+            `).join('');
+          }
+        }
+        // Stats
+        if (data.settings && data.settings.stats && Array.isArray(data.settings.stats)) {
+          const statsGrid = document.getElementById('stats-grid');
+          if (statsGrid) {
+            statsGrid.innerHTML = data.settings.stats.map(s => `
+              <div class="ai-stat">
+                <span class="stat-number">${s.number}</span>
+                <span class="stat-label">${s.label}</span>
+              </div>
+            `).join('');
+          }
+        }
+        // Contact links (WhatsApp, Instagram, etc.)
+        if (data.settings && data.settings.contact) {
+          const contact = data.settings.contact;
+          if (contact.whatsapp) {
+            const whatsappLink = document.getElementById('contact-whatsapp');
+            if (whatsappLink) {
+              whatsappLink.href = `https://wa.me/${contact.whatsapp}`;
+              whatsappLink.textContent = contact.whatsapp;
+            }
+          }
+          if (contact.instagram) {
+            const instaLink = document.getElementById('contact-instagram');
+            if (instaLink) {
+              instaLink.href = `https://instagram.com/${contact.instagram}`;
+              instaLink.textContent = contact.instagram;
+            }
+          }
+          if (contact.twitter) {
+            const twitterLink = document.getElementById('contact-twitter');
+            if (twitterLink) {
+              twitterLink.href = `https://twitter.com/${contact.twitter}`;
+              twitterLink.textContent = contact.twitter;
+            }
+          }
+          if (contact.youtube) {
+            const youtubeLink = document.getElementById('contact-youtube');
+            if (youtubeLink) {
+              youtubeLink.href = `https://youtube.com/@${contact.youtube}`;
+              youtubeLink.textContent = contact.youtube;
+            }
+          }
+        }
         // Colors (optional: update CSS variables)
         if (data.settings && data.settings.colors) {
           const root = document.documentElement;

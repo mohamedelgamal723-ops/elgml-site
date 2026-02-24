@@ -8,9 +8,11 @@ const AUTH_CONFIG = {
 function el(q, ns=document){return ns.querySelector(q)}
 function elA(q, ns=document){return Array.from(ns.querySelectorAll(q))}
 
-let currentData = { site: {}, projects: [], settings: {} };
+let currentData = { site: {}, projects: [], stats: [], services: [], settings: {} };
 let logoDataUrl = '';
 let editingProjectIndex = null;
+let editingServiceIndex = null;
+let editingStatIndex = null;
 let isAuthenticated = false;
 
 // Check authentication on page load
@@ -139,7 +141,23 @@ async function load() {
     el('#showPortfolio').checked = settings.features?.showPortfolio !== false;
     el('#animationsEnabled').checked = settings.features?.animationsEnabled !== false;
     
+    // Load contact info
+    const contact = settings.contact || {};
+    el('#contactEmail').value = contact.email || currentData.site.email || '';
+    el('#contactWhatsapp').value = contact.whatsapp || '';
+    el('#contactInstagram').value = contact.instagram || '';
+    el('#contactTwitter').value = contact.twitter || '';
+    el('#contactYoutube').value = contact.youtube || '';
+    
+    // Load stats
+    currentData.stats = settings.stats || [];
+    
+    // Load services
+    currentData.services = settings.services || [];
+    
     renderProjects();
+    renderServices();
+    renderStats();
     updateStats();
   } catch(e){
     console.error('Error loading data:', e);
@@ -199,6 +217,63 @@ function renderProjects() {
       <p style="opacity: 0.6; font-size: 0.85rem;">
         📹 ${escapeHtml(p.video)} | 🖼️ ${escapeHtml(p.poster)}
       </p>
+    </div>
+  `).join('');
+}
+
+// Render services list
+function renderServices() {
+  const list = el('#services-list');
+  const empty = el('#emptyServices');
+  
+  if (!currentData.services || currentData.services.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  empty.style.display = 'none';
+  list.innerHTML = currentData.services.map((s, idx) => `
+    <div class="project-item">
+      <div class="project-header">
+        <div>
+          <h3 style="color: var(--light); margin-bottom: 5px;">${s.icon || '✨'} ${escapeHtml(s.title)}</h3>
+          <p class="project-index">الخدمة #${idx + 1}</p>
+        </div>
+        <div class="project-actions">
+          <button class="btn btn-small btn-secondary" onclick="editService(${idx})">✏️ تعديل</button>
+          <button class="btn btn-small btn-danger" onclick="deleteService(${idx})">🗑️ حذف</button>
+        </div>
+      </div>
+      <p style="opacity: 0.8; font-size: 0.9rem;">${escapeHtml(s.description)}</p>
+    </div>
+  `).join('');
+}
+
+// Render stats list
+function renderStats() {
+  const list = el('#stats-list');
+  const empty = el('#emptyStats');
+  
+  if (!currentData.stats || currentData.stats.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  empty.style.display = 'none';
+  list.innerHTML = currentData.stats.map((s, idx) => `
+    <div class="project-item">
+      <div class="project-header">
+        <div>
+          <h3 style="color: var(--light); margin-bottom: 5px;">📊 ${escapeHtml(s.number)}</h3>
+          <p class="project-index">${escapeHtml(s.label)}</p>
+        </div>
+        <div class="project-actions">
+          <button class="btn btn-small btn-secondary" onclick="editStat(${idx})">✏️ تعديل</button>
+          <button class="btn btn-small btn-danger" onclick="deleteStat(${idx})">🗑️ حذف</button>
+        </div>
+      </div>
     </div>
   `).join('');
 }
@@ -328,6 +403,163 @@ function deleteProject(index) {
   }
 }
 
+// Service management functions
+function openServiceModal(index) {
+  editingServiceIndex = index;
+  const modal = el('#serviceModal');
+  const title = el('#serviceModalTitle');
+  
+  if (index === null) {
+    title.textContent = '➕ أضف خدمة جديدة';
+    el('#serviceTitle').value = '';
+    el('#serviceDesc').value = '';
+    el('#serviceIcon').value = '✨';
+  } else {
+    const s = currentData.services[index];
+    title.textContent = '✏️ تعديل الخدمة';
+    el('#serviceTitle').value = s.title || '';
+    el('#serviceDesc').value = s.description || '';
+    el('#serviceIcon').value = s.icon || '✨';
+  }
+  
+  modal.classList.add('active');
+}
+
+function closeServiceModal() {
+  el('#serviceModal').classList.remove('active');
+  editingServiceIndex = null;
+}
+
+function saveService() {
+  const title = el('#serviceTitle').value.trim();
+  const desc = el('#serviceDesc').value.trim();
+  const icon = el('#serviceIcon').value.trim() || '✨';
+  
+  if (!title || !desc) {
+    alert('⚠️ يجب ملء جميع الحقول');
+    return;
+  }
+  
+  const service = {
+    id: Date.now().toString(),
+    title,
+    description: desc,
+    icon
+  };
+  
+  if (!currentData.services) currentData.services = [];
+  
+  if (editingServiceIndex !== null) {
+    service.id = currentData.services[editingServiceIndex].id;
+    currentData.services[editingServiceIndex] = service;
+  } else {
+    currentData.services.push(service);
+  }
+  
+  renderServices();
+  closeServiceModal();
+  showSuccess('تم حفظ الخدمة بنجاح');
+  localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
+}
+
+function editService(index) {
+  openServiceModal(index);
+}
+
+function deleteService(index) {
+  if (confirm('هل أنت متأكد من حذف هذه الخدمة؟')) {
+    currentData.services.splice(index, 1);
+    renderServices();
+    showSuccess('تم حذف الخدمة');
+    localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
+  }
+}
+
+// Stat management functions
+function openStatModal(index) {
+  editingStatIndex = index;
+  const modal = el('#statModal');
+  const title = el('#statModalTitle');
+  
+  if (index === null) {
+    title.textContent = '➕ أضف إحصائية جديدة';
+    el('#statNumber').value = '';
+    el('#statLabel').value = '';
+  } else {
+    const s = currentData.stats[index];
+    title.textContent = '✏️ تعديل الإحصائية';
+    el('#statNumber').value = s.number || '';
+    el('#statLabel').value = s.label || '';
+  }
+  
+  modal.classList.add('active');
+}
+
+function closeStatModal() {
+  el('#statModal').classList.remove('active');
+  editingStatIndex = null;
+}
+
+function saveStat() {
+  const number = el('#statNumber').value.trim();
+  const label = el('#statLabel').value.trim();
+  
+  if (!number || !label) {
+    alert('⚠️ يجب ملء جميع الحقول');
+    return;
+  }
+  
+  const stat = {
+    id: Date.now().toString(),
+    number,
+    label
+  };
+  
+  if (!currentData.stats) currentData.stats = [];
+  
+  if (editingStatIndex !== null) {
+    stat.id = currentData.stats[editingStatIndex].id;
+    currentData.stats[editingStatIndex] = stat;
+  } else {
+    currentData.stats.push(stat);
+  }
+  
+  renderStats();
+  closeStatModal();
+  showSuccess('تم حفظ الإحصائية بنجاح');
+  localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
+}
+
+function editStat(index) {
+  openStatModal(index);
+}
+
+function deleteStat(index) {
+  if (confirm('هل أنت متأكد من حذف هذه الإحصائية؟')) {
+    currentData.stats.splice(index, 1);
+    renderStats();
+    showSuccess('تم حذف الإحصائية');
+    localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
+  }
+}
+
+// Save contact info
+function saveContactInfo() {
+  if (!currentData.settings) currentData.settings = {};
+  if (!currentData.settings.contact) currentData.settings.contact = {};
+  
+  currentData.settings.contact = {
+    email: el('#contactEmail').value.trim(),
+    whatsapp: el('#contactWhatsapp').value.trim(),
+    instagram: el('#contactInstagram').value.trim(),
+    twitter: el('#contactTwitter').value.trim(),
+    youtube: el('#contactYoutube').value.trim()
+  };
+  
+  showSuccess('تم حفظ بيانات التواصل بنجاح');
+  localStorage.setItem('elgml_contact', JSON.stringify(currentData.settings.contact));
+}
+
 // Show success message
 function showSuccess(msg) {
   const msgEl = el('#successMessage');
@@ -343,10 +575,18 @@ function escapeHtml(s){
 
 // Build JSON object
 function buildJSON() {
+  saveSiteMeta();
+  saveSettings();
+  saveContactInfo();
+  
+  const settings = currentData.settings || {};
+  settings.stats = currentData.stats || [];
+  settings.services = currentData.services || [];
+  
   return {
     site: currentData.site,
     projects: currentData.projects,
-    settings: currentData.settings || {}
+    settings: settings
   };
 }
 
@@ -397,9 +637,18 @@ function backupData() {
 
 // Close modal when clicking outside
 window.addEventListener('click', (e) => {
-  const modal = el('#projectModal');
-  if (e.target === modal) {
+  const projectModal = el('#projectModal');
+  const serviceModal = el('#serviceModal');
+  const statModal = el('#statModal');
+  
+  if (e.target === projectModal) {
     closeProjectModal();
+  }
+  if (e.target === serviceModal) {
+    closeServiceModal();
+  }
+  if (e.target === statModal) {
+    closeStatModal();
   }
 });
 
