@@ -214,6 +214,7 @@
 
     input[type="text"],
     input[type="email"],
+    input[type="color"],
     textarea {
       width: 100%;
       padding: 12px 15px;
@@ -581,6 +582,93 @@
         </div>
 
         <button class="btn btn-primary" onclick="openProjectModal(null)" style="margin-top: 20px;">➕ أضف مشروع جديد</button>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="panel-section">
+        <h2 class="section-title">⚙️ الإعدادات المتقدمة</h2>
+        
+        <div style="margin-bottom: 25px;">
+          <h3 style="color: var(--light); margin-bottom: 15px; font-size: 1.1rem;">🎨 الألوان</h3>
+          <div class="field-row">
+            <div class="form-group">
+              <label>اللون الأساسي</label>
+              <input type="color" id="colorPrimary" value="#ff6b6b" style="height: 45px; cursor: pointer;">
+            </div>
+            <div class="form-group">
+              <label>اللون الثانوي</label>
+              <input type="color" id="colorSecondary" value="#4ecdc4" style="height: 45px; cursor: pointer;">
+            </div>
+            <div class="form-group">
+              <label>اللون الأساسي للخلفية</label>
+              <input type="color" id="colorDark" value="#0a0e27" style="height: 45px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="color: var(--light); margin-bottom: 15px; font-size: 1.1rem;">📝 النصوص والعناوين</h3>
+          <div class="form-group">
+            <label>عنوان قسم "عني"</label>
+            <input type="text" id="aboutTitle" placeholder="عني">
+          </div>
+          <div class="form-group">
+            <label>عنوان قسم "الخدمات"</label>
+            <input type="text" id="servicesTitle" placeholder="الخدمات">
+          </div>
+          <div class="form-group">
+            <label>عنوان قسم "الأعمال"</label>
+            <input type="text" id="portfolioTitle" placeholder="أحدث الأعمال">
+          </div>
+          <div class="form-group">
+            <label>عنوان قسم "التواصل"</label>
+            <input type="text" id="contactTitle" placeholder="تواصل معي">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="color: var(--light); margin-bottom: 15px; font-size: 1.1rem;">📊 إعدادات SEO</h3>
+          <div class="form-group">
+            <label>عنوان الصفحة (Page Title)</label>
+            <input type="text" id="seoTitle" placeholder="Elgml - صوت احترافي">
+          </div>
+          <div class="form-group">
+            <label>وصف الصفحة (Meta Description)</label>
+            <textarea id="seoDescription" placeholder="وصف قصير عن موقعك"></textarea>
+          </div>
+          <div class="form-group">
+            <label>الكلمات المفتاحية (Keywords)</label>
+            <input type="text" id="seoKeywords" placeholder="voiceover, صوت, إعلان">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <h3 style="color: var(--light); margin-bottom: 15px; font-size: 1.1rem;">✨ المميزات والإضافات</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="show3dBackground" checked>
+              <span>عرض الخلفية ثلاثية الأبعاد</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="showStats" checked>
+              <span>عرض الإحصائيات</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="showServices" checked>
+              <span>عرض قسم الخدمات</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="showPortfolio" checked>
+              <span>عرض قسم الأعمال</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="animationsEnabled" checked>
+              <span>تفعيل الرسوم المتحركة</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ جميع الإعدادات</button>
       </div>
 
       <!-- Export Section -->

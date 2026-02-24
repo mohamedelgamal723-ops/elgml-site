@@ -4,6 +4,37 @@
     "lead": "معلق، صانع إعلانات ومُخرج أفلام باستخدام الذكاء الاصطناعي",
     "email": "mohamedelgamal723@gmail.com"
   },
+  "settings": {
+    "colors": {
+      "primary": "#ff6b6b",
+      "secondary": "#4ecdc4",
+      "dark": "#0a0e27"
+    },
+    "typography": {
+      "heroTitleSize": "4.5rem",
+      "sectionTitleSize": "2.5rem"
+    },
+    "seo": {
+      "title": "Elgml - صوت احترافي وإنتاج إعلاني",
+      "description": "مقدم أصوات احترافي وخبير إنتاج إعلاني وفنان أفلام ذكي",
+      "keywords": "voiceover, صوت, إعلان, ad production, أفلام, AI"
+    },
+    "pages": {
+      "aboutTitle": "عني",
+      "aboutText1": "مرحبا! أنا متخصص في تقديم الأصوات الاحترافية والإنتاج الإعلاني",
+      "aboutText2": "أساعد العلامات التجارية على إيصال رسالتهم بطريقة احترافية",
+      "servicesTitle": "الخدمات",
+      "portfolioTitle": "أحدث الأعمال",
+      "contactTitle": "تواصل معي"
+    },
+    "features": {
+      "show3dBackground": true,
+      "showStats": true,
+      "showServices": true,
+      "showPortfolio": true,
+      "animationsEnabled": true
+    }
+  },
   "projects": [
     {
       "id": "project1",
