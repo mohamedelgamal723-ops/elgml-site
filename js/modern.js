@@ -8,16 +8,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Try to load from localStorage first (fresh changes from panel)
         let data = null;
         const savedData = localStorage.getItem('elgml_backup');
+        console.log('[Modern.js] Checking localStorage elgml_backup:', savedData ? '✓ Found' : '✗ Not found');
+        
         if (savedData) {
           try {
             data = JSON.parse(savedData);
-          } catch(e) {}
+            console.log('[Modern.js] Loaded from localStorage:', data);
+          } catch(e) {
+            console.log('[Modern.js] localStorage data corrupted, loading from content.json');
+          }
         }
         
         // If no saved data, load from content.json
         if (!data) {
           const res = await fetch('data/content.json', {cache: 'no-store'});
           data = await res.json();
+          console.log('[Modern.js] Loaded from content.json:', data);
         } else {
           // Also fetch fresh content.json to merge with localStorage data
           try {
@@ -28,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!data.settings) data.settings = freshData.settings;
             if (!data.projects) data.projects = freshData.projects;
           } catch(e) {
+            console.log('[Modern.js] Could not fetch content.json');
             // Use only localStorage data if fetch fails
           }
         }
@@ -157,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial load
     loadSiteContent();
 
-    // Live reload: poll for changes every 2 seconds
-    setInterval(loadSiteContent, 2000);
+    // Live reload: poll for changes every 1 second (more frequent)
+    setInterval(loadSiteContent, 1000);
   // Animate hero content on load
   gsap.from('.hero-content', {
     duration: 1,

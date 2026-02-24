@@ -86,9 +86,12 @@ function renderLogo() {
 // Save logo
 function saveLogo() {
   if (logoDataUrl) {
+    if (!currentData.site) currentData.site = {};
     currentData.site.logo = logoDataUrl;
+    if (!currentData.settings) currentData.settings = {};
     showSuccess('تم حفظ الشعار بنجاح');
     localStorage.setItem('elgml_site_logo', logoDataUrl);
+    // Save complete data
     localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   } else {
     alert('يرجى اختيار صورة شعار أولاً');
@@ -297,19 +300,30 @@ function renderStats() {
 
 // Get and save site metadata
 function saveSiteMeta() {
+  if (!currentData.site) currentData.site = {};
+  if (!currentData.settings) currentData.settings = {};
+  
   currentData.site.brand = el('#brand').value;
   currentData.site.lead = el('#lead').value;
   currentData.site.email = el('#email').value;
   // logo is handled separately
   updateStats();
   showSuccess('تم حفظ بيانات الموقع');
-  // Save to localStorage so changes appear immediately
+  // Save to localStorage - complete data
   localStorage.setItem('elgml_backup', JSON.stringify(currentData));
-  localStorage.setItem('elgml_site_meta', JSON.stringify(currentData));
+  localStorage.setItem('elgml_site_meta', JSON.stringify(currentData.site));
+  // Force the site to reload
+  if (window.location.pathname.includes('panel')) {
+    // On panel, just show success
+  }
 }
 
 // Save settings
 function saveSettings() {
+  if (!currentData.settings) currentData.settings = {};
+  if (!currentData.site) currentData.site = {};
+  if (!currentData.projects) currentData.projects = [];
+  
   currentData.settings.colors = {
     primary: el('#colorPrimary').value,
     secondary: el('#colorSecondary').value,
@@ -336,15 +350,23 @@ function saveSettings() {
     animationsEnabled: el('#animationsEnabled').checked
   };
   
-  // Ensure stats and services are in settings
-  if (!currentData.settings.stats) currentData.settings.stats = [];
-  if (!currentData.settings.services) currentData.settings.services = [];
+  // CRITICAL: Ensure stats, services and contact are always in settings
   currentData.settings.stats = currentData.stats || [];
   currentData.settings.services = currentData.services || [];
+  currentData.settings.contact = currentData.settings.contact || {};
   
-  showSuccess('تم حفظ الإعدادات بنجاح! قد تحتاج لتحديث الصفحة الرئيسية');
+  showSuccess('تم حفظ الإعدادات بنجاح!');
+  
+  // Save COMPLETE data structure
+  const completeData = {
+    site: currentData.site,
+    projects: currentData.projects,
+    settings: currentData.settings
+  };
+  localStorage.setItem('elgml_backup', JSON.stringify(completeData));
   localStorage.setItem('elgml_settings', JSON.stringify(currentData.settings));
-  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
+  localStorage.setItem('elgml_site_meta', JSON.stringify(currentData.site));
+}
 }
 
 // Open project modal for adding new project
