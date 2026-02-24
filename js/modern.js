@@ -39,7 +39,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // About section text
         if (data.settings && data.settings.pages) {
-          // You can add more granular about text fields if needed
+          if (data.settings.pages.aboutText1) {
+            const aboutP1 = document.querySelector('#about .about-text p:nth-child(1)');
+            if (aboutP1) aboutP1.textContent = data.settings.pages.aboutText1;
+          }
+          if (data.settings.pages.aboutText2) {
+            const aboutP2 = document.querySelector('#about .about-text p:nth-child(2)');
+            if (aboutP2) aboutP2.textContent = data.settings.pages.aboutText2;
+          }
         }
         // Portfolio/projects
         if (data.projects && Array.isArray(data.projects)) {

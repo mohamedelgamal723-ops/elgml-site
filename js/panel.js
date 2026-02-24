@@ -123,6 +123,8 @@ async function load() {
     el('#colorDark').value = settings.colors?.dark || '#0a0e27';
     
     el('#aboutTitle').value = settings.pages?.aboutTitle || 'عني';
+    el('#aboutText1').value = settings.pages?.aboutText1 || '';
+    el('#aboutText2').value = settings.pages?.aboutText2 || '';
     el('#servicesTitle').value = settings.pages?.servicesTitle || 'الخدمات';
     el('#portfolioTitle').value = settings.pages?.portfolioTitle || 'أحدث الأعمال';
     el('#contactTitle').value = settings.pages?.contactTitle || 'تواصل معي';
@@ -221,6 +223,8 @@ function saveSettings() {
   };
   currentData.settings.pages = {
     aboutTitle: el('#aboutTitle').value,
+    aboutText1: el('#aboutText1').value,
+    aboutText2: el('#aboutText2').value,
     servicesTitle: el('#servicesTitle').value,
     portfolioTitle: el('#portfolioTitle').value,
     contactTitle: el('#contactTitle').value
