@@ -2,28 +2,22 @@
 gsap.registerPlugin();
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Load site content from content.json and update all sections
+    // Load site content from content.json and update all sections (AI/Editor Theme)
     async function loadSiteContent() {
       try {
         const res = await fetch('data/content.json', {cache: 'no-store'});
         const data = await res.json();
-        // Navbar brand
-        if (data.site && data.site.brand) {
-          document.querySelector('.logo-text').textContent = data.site.brand;
+        // Navbar logo (image only)
+        if (data.site && data.site.logo) {
+          let navImg = document.querySelector('.logo-img');
+          if (navImg) navImg.src = data.site.logo;
         }
         // Hero section
         if (data.site && data.site.brand) {
-          document.getElementById('site-title').textContent = 'مرحبا أنا ' + data.site.brand;
+          document.getElementById('site-title').textContent = data.site.brand + ' | مونتير وAI Creator';
         }
         if (data.site && data.site.lead) {
           document.getElementById('site-subtitle').textContent = data.site.lead;
-        }
-        // Logo
-        if (data.site && data.site.logo) {
-          let nav = document.querySelector('.logo-text');
-          if (nav && data.site.logo) {
-            nav.innerHTML = `<img src="${data.site.logo}" alt="logo" style="max-height:40px;vertical-align:middle;">`;
-          }
         }
         // Email
         if (data.site && data.site.email) {
@@ -32,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // Section titles
         if (data.settings && data.settings.pages) {
-          if (data.settings.pages.aboutTitle) document.querySelector('#about .section-title').textContent = data.settings.pages.aboutTitle;
-          if (data.settings.pages.servicesTitle) document.querySelector('#services .section-title').textContent = data.settings.pages.servicesTitle;
-          if (data.settings.pages.portfolioTitle) document.querySelector('#portfolio .section-title').textContent = data.settings.pages.portfolioTitle;
-          if (data.settings.pages.contactTitle) document.querySelector('#contact .section-title').textContent = data.settings.pages.contactTitle;
+          if (data.settings.pages.aboutTitle) document.querySelector('#about .ai-section-title').textContent = data.settings.pages.aboutTitle;
+          if (data.settings.pages.servicesTitle) document.querySelector('#services .ai-section-title').textContent = data.settings.pages.servicesTitle;
+          if (data.settings.pages.portfolioTitle) document.querySelector('#portfolio .ai-section-title').textContent = data.settings.pages.portfolioTitle;
+          if (data.settings.pages.contactTitle) document.querySelector('#contact .ai-section-title').textContent = data.settings.pages.contactTitle;
         }
         // About section text
         if (data.settings && data.settings.pages) {
           if (data.settings.pages.aboutText1) {
-            const aboutP1 = document.querySelector('#about .about-text p:nth-child(1)');
+            const aboutP1 = document.querySelector('#about .ai-about-text p:nth-child(1)');
             if (aboutP1) aboutP1.textContent = data.settings.pages.aboutText1;
           }
           if (data.settings.pages.aboutText2) {
-            const aboutP2 = document.querySelector('#about .about-text p:nth-child(2)');
+            const aboutP2 = document.querySelector('#about .ai-about-text p:nth-child(2)');
             if (aboutP2) aboutP2.textContent = data.settings.pages.aboutText2;
           }
         }
@@ -54,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (grid) {
             grid.innerHTML = data.projects.map(p => `
               <div class="portfolio-item">
-                <video src="${p.video}" poster="${p.poster}" controls style="width:100%;border-radius:10px;"></video>
+                <video src="${p.video}" poster="${p.poster}" controls></video>
                 <h3>${p.title}</h3>
                 <p>${p.description}</p>
               </div>
