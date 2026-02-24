@@ -73,6 +73,28 @@ function handleLogout() {
   }
 }
 
+// Render logo preview
+function renderLogo() {
+  const preview = el('#logoPreview');
+  if (logoDataUrl) {
+    preview.innerHTML = `<img src="${logoDataUrl}" alt="الشعار" style="max-width:180px;max-height:90px;display:block;">`;
+  } else {
+    preview.innerHTML = '<span style="opacity:0.6;">لا يوجد شعار حالي</span>';
+  }
+}
+
+// Save logo
+function saveLogo() {
+  if (logoDataUrl) {
+    currentData.site.logo = logoDataUrl;
+    showSuccess('تم حفظ الشعار بنجاح');
+    localStorage.setItem('elgml_site_logo', logoDataUrl);
+    localStorage.setItem('elgml_backup', JSON.stringify(currentData));
+  } else {
+    alert('يرجى اختيار صورة شعار أولاً');
+  }
+}
+
 // Load data from localStorage first, then from content.json
 async function load() {
   try {
@@ -100,15 +122,6 @@ async function load() {
     // Load logo
     logoDataUrl = currentData.site.logo || '';
     renderLogo();
-    // Render logo preview
-    function renderLogo() {
-      const preview = el('#logoPreview');
-      if (logoDataUrl) {
-        preview.innerHTML = `<img src="${logoDataUrl}" alt="الشعار" style="max-width:180px;max-height:90px;display:block;">`;
-      } else {
-        preview.innerHTML = '<span style="opacity:0.6;">لا يوجد شعار حالي</span>';
-      }
-    }
 
     // Handle logo file input
     el('#logoInput').addEventListener('change', function(e) {
@@ -121,18 +134,6 @@ async function load() {
       };
       reader.readAsDataURL(file);
     });
-
-    // Save logo
-    function saveLogo() {
-      if (logoDataUrl) {
-        currentData.site.logo = logoDataUrl;
-        showSuccess('تم حفظ الشعار بنجاح');
-        localStorage.setItem('elgml_site_logo', logoDataUrl);
-        localStorage.setItem('elgml_backup', JSON.stringify(currentData));
-      } else {
-        alert('يرجى اختيار صورة شعار أولاً');
-      }
-    }
     
     // Load settings
     const settings = currentData.settings || {};
@@ -165,10 +166,10 @@ async function load() {
     el('#contactTwitter').value = contact.twitter || '';
     el('#contactYoutube').value = contact.youtube || '';
     
-    // Load stats
+    // Load stats from settings
     currentData.stats = settings.stats || [];
     
-    // Load services
+    // Load services from settings
     currentData.services = settings.services || [];
     
     renderProjects();
@@ -334,6 +335,13 @@ function saveSettings() {
     showPortfolio: el('#showPortfolio').checked,
     animationsEnabled: el('#animationsEnabled').checked
   };
+  
+  // Ensure stats and services are in settings
+  if (!currentData.settings.stats) currentData.settings.stats = [];
+  if (!currentData.settings.services) currentData.settings.services = [];
+  currentData.settings.stats = currentData.stats || [];
+  currentData.settings.services = currentData.services || [];
+  
   showSuccess('تم حفظ الإعدادات بنجاح! قد تحتاج لتحديث الصفحة الرئيسية');
   localStorage.setItem('elgml_settings', JSON.stringify(currentData.settings));
   localStorage.setItem('elgml_backup', JSON.stringify(currentData));
@@ -469,6 +477,8 @@ function saveService() {
   };
   
   if (!currentData.services) currentData.services = [];
+  if (!currentData.settings) currentData.settings = {};
+  if (!currentData.settings.services) currentData.settings.services = [];
   
   if (editingServiceIndex !== null) {
     service.id = currentData.services[editingServiceIndex].id;
@@ -476,6 +486,9 @@ function saveService() {
   } else {
     currentData.services.push(service);
   }
+  
+  // Also update in settings
+  currentData.settings.services = currentData.services;
   
   renderServices();
   closeServiceModal();
@@ -491,6 +504,8 @@ function editService(index) {
 function deleteService(index) {
   if (confirm('هل أنت متأكد من حذف هذه الخدمة؟')) {
     currentData.services.splice(index, 1);
+    if (!currentData.settings) currentData.settings = {};
+    currentData.settings.services = currentData.services;
     renderServices();
     showSuccess('تم حذف الخدمة');
     localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
@@ -539,6 +554,8 @@ function saveStat() {
   };
   
   if (!currentData.stats) currentData.stats = [];
+  if (!currentData.settings) currentData.settings = {};
+  if (!currentData.settings.stats) currentData.settings.stats = [];
   
   if (editingStatIndex !== null) {
     stat.id = currentData.stats[editingStatIndex].id;
@@ -546,6 +563,9 @@ function saveStat() {
   } else {
     currentData.stats.push(stat);
   }
+  
+  // Also update in settings
+  currentData.settings.stats = currentData.stats;
   
   renderStats();
   closeStatModal();
@@ -561,6 +581,8 @@ function editStat(index) {
 function deleteStat(index) {
   if (confirm('هل أنت متأكد من حذف هذه الإحصائية؟')) {
     currentData.stats.splice(index, 1);
+    if (!currentData.settings) currentData.settings = {};
+    currentData.settings.stats = currentData.stats;
     renderStats();
     showSuccess('تم حذف الإحصائية');
     localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
