@@ -2,6 +2,81 @@
 gsap.registerPlugin();
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Load site content from content.json and update all sections
+    async function loadSiteContent() {
+      try {
+        const res = await fetch('data/content.json', {cache: 'no-store'});
+        const data = await res.json();
+        // Navbar brand
+        if (data.site && data.site.brand) {
+          document.querySelector('.logo-text').textContent = data.site.brand;
+        }
+        // Hero section
+        if (data.site && data.site.brand) {
+          document.getElementById('site-title').textContent = 'مرحبا أنا ' + data.site.brand;
+        }
+        if (data.site && data.site.lead) {
+          document.getElementById('site-subtitle').textContent = data.site.lead;
+        }
+        // Logo
+        if (data.site && data.site.logo) {
+          let nav = document.querySelector('.logo-text');
+          if (nav && data.site.logo) {
+            nav.innerHTML = `<img src="${data.site.logo}" alt="logo" style="max-height:40px;vertical-align:middle;">`;
+          }
+        }
+        // Email
+        if (data.site && data.site.email) {
+          document.getElementById('contact-email').textContent = data.site.email;
+          document.getElementById('contact-email').href = 'mailto:' + data.site.email;
+        }
+        // Section titles
+        if (data.settings && data.settings.pages) {
+          if (data.settings.pages.aboutTitle) document.querySelector('#about .section-title').textContent = data.settings.pages.aboutTitle;
+          if (data.settings.pages.servicesTitle) document.querySelector('#services .section-title').textContent = data.settings.pages.servicesTitle;
+          if (data.settings.pages.portfolioTitle) document.querySelector('#portfolio .section-title').textContent = data.settings.pages.portfolioTitle;
+          if (data.settings.pages.contactTitle) document.querySelector('#contact .section-title').textContent = data.settings.pages.contactTitle;
+        }
+        // About section text
+        if (data.settings && data.settings.pages) {
+          // You can add more granular about text fields if needed
+        }
+        // Portfolio/projects
+        if (data.projects && Array.isArray(data.projects)) {
+          const grid = document.getElementById('portfolio-grid');
+          if (grid) {
+            grid.innerHTML = data.projects.map(p => `
+              <div class="portfolio-item">
+                <video src="${p.video}" poster="${p.poster}" controls style="width:100%;border-radius:10px;"></video>
+                <h3>${p.title}</h3>
+                <p>${p.description}</p>
+              </div>
+            `).join('');
+          }
+        }
+        // Colors (optional: update CSS variables)
+        if (data.settings && data.settings.colors) {
+          const root = document.documentElement;
+          if (data.settings.colors.primary) root.style.setProperty('--primary', data.settings.colors.primary);
+          if (data.settings.colors.secondary) root.style.setProperty('--secondary', data.settings.colors.secondary);
+          if (data.settings.colors.dark) root.style.setProperty('--dark', data.settings.colors.dark);
+        }
+        // SEO (optional: update meta tags)
+        if (data.settings && data.settings.seo) {
+          if (data.settings.seo.title) document.title = data.settings.seo.title;
+          if (data.settings.seo.description) document.querySelector('meta[name="description"]').setAttribute('content', data.settings.seo.description);
+          if (data.settings.seo.keywords) document.querySelector('meta[name="keywords"]').setAttribute('content', data.settings.seo.keywords);
+        }
+      } catch(e) {
+        console.error('Error loading site content:', e);
+      }
+    }
+
+    // Initial load
+    loadSiteContent();
+
+    // Live reload: poll for changes every 2 seconds
+    setInterval(loadSiteContent, 2000);
   // Animate hero content on load
   gsap.from('.hero-content', {
     duration: 1,

@@ -550,12 +550,11 @@
       <div class="panel-section">
         <h2 class="section-title">📋 بيانات الموقع</h2>
         <div class="stats-row" id="statsRow"></div>
-        
+        <div style="margin-bottom:10px;color:#ffbebe;font-size:0.95rem;">كل الحقول التالية قابلة للتعديل وستنعكس فوراً على الموقع.</div>
         <div class="form-group">
           <label>اسم البراند</label>
           <input type="text" id="brand" placeholder="مثال: Elgml">
         </div>
-
         <div class="field-row">
           <div class="form-group">
             <label>البريد الإلكتروني</label>
@@ -566,9 +565,23 @@
             <input type="text" id="lead" placeholder="وصف مختصر لخدماتك">
           </div>
         </div>
-
         <button class="btn btn-primary" onclick="saveSiteMeta()">💾 حفظ بيانات الموقع</button>
       </div>
+
+        <!-- Logo Section -->
+        <div class="panel-section">
+          <h2 class="section-title">🖼️ الشعار (اللوجو)</h2>
+          <div class="form-group">
+            <label>الشعار الحالي:</label>
+            <div id="logoPreview" style="margin-bottom: 15px;"></div>
+          </div>
+          <div class="form-group">
+            <label for="logoInput">رفع شعار جديد (PNG, JPG, SVG)</label>
+            <input type="file" id="logoInput" accept="image/*">
+          </div>
+          <div style="color:#ffbebe;font-size:0.92rem;margin-bottom:8px;">يمكنك رفع صورة شعار جديدة وسيتم حفظها مباشرة في إعدادات الموقع.</div>
+          <button class="btn btn-primary" onclick="saveLogo()">💾 حفظ الشعار</button>
+        </div>
 
       <!-- Projects Section -->
       <div class="panel-section">
@@ -590,6 +603,7 @@
         
         <div style="margin-bottom: 25px;">
           <h3 style="color: var(--light); margin-bottom: 15px; font-size: 1.1rem;">🎨 الألوان</h3>
+          <div style="color:#ffbebe;font-size:0.92rem;margin-bottom:8px;">يمكنك تغيير ألوان الموقع بالكامل من هنا.</div>
           <div class="field-row">
             <div class="form-group">
               <label>اللون الأساسي</label>

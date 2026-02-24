@@ -9,6 +9,7 @@ function el(q, ns=document){return ns.querySelector(q)}
 function elA(q, ns=document){return Array.from(ns.querySelectorAll(q))}
 
 let currentData = { site: {}, projects: [], settings: {} };
+let logoDataUrl = '';
 let editingProjectIndex = null;
 let isAuthenticated = false;
 
@@ -79,6 +80,41 @@ async function load() {
     el('#brand').value = currentData.site.brand || 'Elgml';
     el('#lead').value = currentData.site.lead || '';
     el('#email').value = currentData.site.email || '';
+    // Load logo
+    logoDataUrl = currentData.site.logo || '';
+    renderLogo();
+    // Render logo preview
+    function renderLogo() {
+      const preview = el('#logoPreview');
+      if (logoDataUrl) {
+        preview.innerHTML = `<img src="${logoDataUrl}" alt="الشعار" style="max-width:180px;max-height:90px;display:block;">`;
+      } else {
+        preview.innerHTML = '<span style="opacity:0.6;">لا يوجد شعار حالي</span>';
+      }
+    }
+
+    // Handle logo file input
+    el('#logoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        logoDataUrl = evt.target.result;
+        renderLogo();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Save logo
+    function saveLogo() {
+      if (logoDataUrl) {
+        currentData.site.logo = logoDataUrl;
+        showSuccess('تم حفظ الشعار بنجاح');
+        localStorage.setItem('elgml_site_logo', logoDataUrl);
+      } else {
+        alert('يرجى اختيار صورة شعار أولاً');
+      }
+    }
     
     // Load settings
     const settings = currentData.settings || {};
@@ -167,12 +203,10 @@ function renderProjects() {
 
 // Get and save site metadata
 function saveSiteMeta() {
-  currentData.site = {
-    brand: el('#brand').value,
-    lead: el('#lead').value,
-    email: el('#email').value
-  };
-  
+  currentData.site.brand = el('#brand').value;
+  currentData.site.lead = el('#lead').value;
+  currentData.site.email = el('#email').value;
+  // logo is handled separately
   updateStats();
   showSuccess('تم حفظ بيانات الموقع');
   localStorage.setItem('elgml_site_meta', JSON.stringify(currentData));
@@ -180,32 +214,29 @@ function saveSiteMeta() {
 
 // Save settings
 function saveSettings() {
-  currentData.settings = {
-    colors: {
-      primary: el('#colorPrimary').value,
-      secondary: el('#colorSecondary').value,
-      dark: el('#colorDark').value
-    },
-    pages: {
-      aboutTitle: el('#aboutTitle').value,
-      servicesTitle: el('#servicesTitle').value,
-      portfolioTitle: el('#portfolioTitle').value,
-      contactTitle: el('#contactTitle').value
-    },
-    seo: {
-      title: el('#seoTitle').value,
-      description: el('#seoDescription').value,
-      keywords: el('#seoKeywords').value
-    },
-    features: {
-      show3dBackground: el('#show3dBackground').checked,
-      showStats: el('#showStats').checked,
-      showServices: el('#showServices').checked,
-      showPortfolio: el('#showPortfolio').checked,
-      animationsEnabled: el('#animationsEnabled').checked
-    }
+  currentData.settings.colors = {
+    primary: el('#colorPrimary').value,
+    secondary: el('#colorSecondary').value,
+    dark: el('#colorDark').value
   };
-  
+  currentData.settings.pages = {
+    aboutTitle: el('#aboutTitle').value,
+    servicesTitle: el('#servicesTitle').value,
+    portfolioTitle: el('#portfolioTitle').value,
+    contactTitle: el('#contactTitle').value
+  };
+  currentData.settings.seo = {
+    title: el('#seoTitle').value,
+    description: el('#seoDescription').value,
+    keywords: el('#seoKeywords').value
+  };
+  currentData.settings.features = {
+    show3dBackground: el('#show3dBackground').checked,
+    showStats: el('#showStats').checked,
+    showServices: el('#showServices').checked,
+    showPortfolio: el('#showPortfolio').checked,
+    animationsEnabled: el('#animationsEnabled').checked
+  };
   showSuccess('تم حفظ الإعدادات بنجاح! قد تحتاج لتحديث الصفحة الرئيسية');
   localStorage.setItem('elgml_settings', JSON.stringify(currentData.settings));
 }
