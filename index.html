@@ -171,5 +171,25 @@
   <script src="js/app.js"></script>
   <script src="js/three-bg.js"></script>
   <script src="js/modern.js"></script>
+  
+  <!-- Debug Helper: Check localStorage and data sync -->
+  <script>
+    window.debugSync = function() {
+      const data = localStorage.getItem('elgml_backup');
+      if (data) {
+        const parsed = JSON.parse(data);
+        console.log('📊 localStorage.elgml_backup:');
+        console.log('  site:', parsed.site);
+        console.log('  settings.stats:', parsed.settings?.stats);
+        console.log('  settings.services:', parsed.settings?.services);
+        console.log('  projects:', parsed.projects?.length || 0);
+        return parsed;
+      } else {
+        console.log('❌ No elgml_backup in localStorage. Admin panel data not saved yet.');
+        return null;
+      }
+    };
+    console.log('%c💡 To verify data sync: Open browser console and run:\nwindow.debugSync()', 'color: #4ecdc4; font-weight: bold;');
+  </script>
 </body>
 </html>

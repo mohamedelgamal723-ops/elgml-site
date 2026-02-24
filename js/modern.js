@@ -8,14 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Try to load from localStorage first (fresh changes from panel)
         let data = null;
         const savedData = localStorage.getItem('elgml_backup');
-        console.log('[Modern.js] Checking localStorage elgml_backup:', savedData ? '✓ Found' : '✗ Not found');
         
         if (savedData) {
           try {
             data = JSON.parse(savedData);
-            console.log('[Modern.js] Loaded from localStorage:', data);
+            console.log('✅ [Modern.js] Loaded from localStorage:', data);
           } catch(e) {
-            console.log('[Modern.js] localStorage data corrupted, loading from content.json');
+            console.log('❌ [Modern.js] localStorage data corrupted:', e);
           }
         }
         
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!data) {
           const res = await fetch('data/content.json', {cache: 'no-store'});
           data = await res.json();
-          console.log('[Modern.js] Loaded from content.json:', data);
+          console.log('📄 [Modern.js] Loaded from content.json:', data);
         } else {
           // Also fetch fresh content.json to merge with localStorage data
           try {
@@ -34,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!data.settings) data.settings = freshData.settings;
             if (!data.projects) data.projects = freshData.projects;
           } catch(e) {
-            console.log('[Modern.js] Could not fetch content.json');
-            // Use only localStorage data if fetch fails
+            console.log('⚠️ [Modern.js] Could not fetch content.json');
           }
         }
         // Navbar logo (image only)

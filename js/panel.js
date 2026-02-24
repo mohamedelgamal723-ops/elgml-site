@@ -8,7 +8,7 @@ const AUTH_CONFIG = {
 function el(q, ns=document){return ns.querySelector(q)}
 function elA(q, ns=document){return Array.from(ns.querySelectorAll(q))}
 
-let currentData = { site: {}, projects: [], stats: [], services: [], settings: {} };
+let currentData = { site: {}, projects: [], settings: { colors: {}, pages: {}, seo: {}, features: {}, contact: {}, stats: [], services: [] } };
 let logoDataUrl = '';
 let editingProjectIndex = null;
 let editingServiceIndex = null;
@@ -73,6 +73,21 @@ function handleLogout() {
   }
 }
 
+// Initialize data structure safely
+function ensureDataStructure() {
+  if (!currentData) currentData = {};
+  if (!currentData.site) currentData.site = { brand: 'Elgml', lead: '', email: '', logo: '' };
+  if (!currentData.projects) currentData.projects = [];
+  if (!currentData.settings) currentData.settings = {};
+  if (!currentData.settings.colors) currentData.settings.colors = { primary: '#ffb347', secondary: '#4ecdc4', dark: '#0a0e27' };
+  if (!currentData.settings.pages) currentData.settings.pages = {};
+  if (!currentData.settings.seo) currentData.settings.seo = {};
+  if (!currentData.settings.features) currentData.settings.features = {};
+  if (!currentData.settings.contact) currentData.settings.contact = {};
+  if (!currentData.settings.stats) currentData.settings.stats = [];
+  if (!currentData.settings.services) currentData.settings.services = [];
+}
+
 // Render logo preview
 function renderLogo() {
   const preview = el('#logoPreview');
@@ -106,18 +121,26 @@ async function load() {
     if (savedData) {
       try {
         currentData = JSON.parse(savedData);
+        console.log('[Panel] Loaded from localStorage', currentData);
       } catch(e) {
+        console.log('[Panel] localStorage data corrupted, loading from content.json');
         // If localStorage is corrupted, load from content.json
         const res = await fetch('data/content.json', {cache: 'no-store'});
         currentData = await res.json();
       }
     } else {
       // If no saved data, load from content.json
+      console.log('[Panel] No localStorage data, loading from content.json');
       const res = await fetch('data/content.json', {cache: 'no-store'});
       currentData = await res.json();
-      // Save it to localStorage for next time
-      localStorage.setItem('elgml_backup', JSON.stringify(currentData));
     }
+    
+    // CRITICAL: Ensure data structure is complete
+    ensureDataStructure();
+    console.log('[Panel] Data structure ensured, currentData:', currentData);
+    
+    // Save initial data to localStorage if not there
+    localStorage.setItem('elgml_backup', JSON.stringify(currentData));
     
     el('#brand').value = currentData.site.brand || 'Elgml';
     el('#lead').value = currentData.site.lead || '';
@@ -168,12 +191,6 @@ async function load() {
     el('#contactInstagram').value = contact.instagram || '';
     el('#contactTwitter').value = contact.twitter || '';
     el('#contactYoutube').value = contact.youtube || '';
-    
-    // Load stats from settings
-    currentData.stats = settings.stats || [];
-    
-    // Load services from settings
-    currentData.services = settings.services || [];
     
     renderProjects();
     renderServices();
@@ -246,14 +263,14 @@ function renderServices() {
   const list = el('#services-list');
   const empty = el('#emptyServices');
   
-  if (!currentData.services || currentData.services.length === 0) {
+  if (!currentData.settings.services || currentData.settings.services.length === 0) {
     list.innerHTML = '';
     empty.style.display = 'block';
     return;
   }
   
   empty.style.display = 'none';
-  list.innerHTML = currentData.services.map((s, idx) => `
+  list.innerHTML = currentData.settings.services.map((s, idx) => `
     <div class="project-item">
       <div class="project-header">
         <div>
@@ -275,14 +292,14 @@ function renderStats() {
   const list = el('#stats-list');
   const empty = el('#emptyStats');
   
-  if (!currentData.stats || currentData.stats.length === 0) {
+  if (!currentData.settings.stats || currentData.settings.stats.length === 0) {
     list.innerHTML = '';
     empty.style.display = 'block';
     return;
   }
   
   empty.style.display = 'none';
-  list.innerHTML = currentData.stats.map((s, idx) => `
+  list.innerHTML = currentData.settings.stats.map((s, idx) => `
     <div class="project-item">
       <div class="project-header">
         <div>
@@ -300,8 +317,7 @@ function renderStats() {
 
 // Get and save site metadata
 function saveSiteMeta() {
-  if (!currentData.site) currentData.site = {};
-  if (!currentData.settings) currentData.settings = {};
+  ensureDataStructure();
   
   currentData.site.brand = el('#brand').value;
   currentData.site.lead = el('#lead').value;
@@ -309,20 +325,15 @@ function saveSiteMeta() {
   // logo is handled separately
   updateStats();
   showSuccess('تم حفظ بيانات الموقع');
-  // Save to localStorage - complete data
+  // Save COMPLETE data to localStorage
+  console.log('[Panel] Saving site meta, currentData:', currentData);
   localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   localStorage.setItem('elgml_site_meta', JSON.stringify(currentData.site));
-  // Force the site to reload
-  if (window.location.pathname.includes('panel')) {
-    // On panel, just show success
-  }
 }
 
 // Save settings
 function saveSettings() {
-  if (!currentData.settings) currentData.settings = {};
-  if (!currentData.site) currentData.site = {};
-  if (!currentData.projects) currentData.projects = [];
+  ensureDataStructure();
   
   currentData.settings.colors = {
     primary: el('#colorPrimary').value,
@@ -350,20 +361,14 @@ function saveSettings() {
     animationsEnabled: el('#animationsEnabled').checked
   };
   
-  // CRITICAL: Ensure stats, services and contact are always in settings
-  currentData.settings.stats = currentData.stats || [];
-  currentData.settings.services = currentData.services || [];
+  // CRITICAL: Ensure contact is always in settings
   currentData.settings.contact = currentData.settings.contact || {};
   
   showSuccess('تم حفظ الإعدادات بنجاح!');
   
+  console.log('[Panel] Saving settings, currentData:', currentData);
   // Save COMPLETE data structure
-  const completeData = {
-    site: currentData.site,
-    projects: currentData.projects,
-    settings: currentData.settings
-  };
-  localStorage.setItem('elgml_backup', JSON.stringify(completeData));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   localStorage.setItem('elgml_settings', JSON.stringify(currentData.settings));
   localStorage.setItem('elgml_site_meta', JSON.stringify(currentData.site));
 }
@@ -466,7 +471,7 @@ function openServiceModal(index) {
     el('#serviceDesc').value = '';
     el('#serviceIcon').value = '✨';
   } else {
-    const s = currentData.services[index];
+    const s = currentData.settings.services[index];
     title.textContent = '✏️ تعديل الخدمة';
     el('#serviceTitle').value = s.title || '';
     el('#serviceDesc').value = s.description || '';
@@ -482,6 +487,8 @@ function closeServiceModal() {
 }
 
 function saveService() {
+  ensureDataStructure();
+  
   const title = el('#serviceTitle').value.trim();
   const desc = el('#serviceDesc').value.trim();
   const icon = el('#serviceIcon').value.trim() || '✨';
@@ -498,24 +505,17 @@ function saveService() {
     icon
   };
   
-  if (!currentData.services) currentData.services = [];
-  if (!currentData.settings) currentData.settings = {};
-  if (!currentData.settings.services) currentData.settings.services = [];
-  
   if (editingServiceIndex !== null) {
-    service.id = currentData.services[editingServiceIndex].id;
-    currentData.services[editingServiceIndex] = service;
+    service.id = currentData.settings.services[editingServiceIndex].id;
+    currentData.settings.services[editingServiceIndex] = service;
   } else {
-    currentData.services.push(service);
+    currentData.settings.services.push(service);
   }
-  
-  // Also update in settings
-  currentData.settings.services = currentData.services;
   
   renderServices();
   closeServiceModal();
   showSuccess('تم حفظ الخدمة بنجاح');
-  localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
+  console.log('[Panel] Saving service, currentData:', currentData);
   localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
@@ -525,12 +525,9 @@ function editService(index) {
 
 function deleteService(index) {
   if (confirm('هل أنت متأكد من حذف هذه الخدمة؟')) {
-    currentData.services.splice(index, 1);
-    if (!currentData.settings) currentData.settings = {};
-    currentData.settings.services = currentData.services;
+    currentData.settings.services.splice(index, 1);
     renderServices();
     showSuccess('تم حذف الخدمة');
-    localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
     localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   }
 }
@@ -546,7 +543,7 @@ function openStatModal(index) {
     el('#statNumber').value = '';
     el('#statLabel').value = '';
   } else {
-    const s = currentData.stats[index];
+    const s = currentData.settings.stats[index];
     title.textContent = '✏️ تعديل الإحصائية';
     el('#statNumber').value = s.number || '';
     el('#statLabel').value = s.label || '';
@@ -561,6 +558,8 @@ function closeStatModal() {
 }
 
 function saveStat() {
+  ensureDataStructure();
+  
   const number = el('#statNumber').value.trim();
   const label = el('#statLabel').value.trim();
   
@@ -575,24 +574,17 @@ function saveStat() {
     label
   };
   
-  if (!currentData.stats) currentData.stats = [];
-  if (!currentData.settings) currentData.settings = {};
-  if (!currentData.settings.stats) currentData.settings.stats = [];
-  
   if (editingStatIndex !== null) {
-    stat.id = currentData.stats[editingStatIndex].id;
-    currentData.stats[editingStatIndex] = stat;
+    stat.id = currentData.settings.stats[editingStatIndex].id;
+    currentData.settings.stats[editingStatIndex] = stat;
   } else {
-    currentData.stats.push(stat);
+    currentData.settings.stats.push(stat);
   }
-  
-  // Also update in settings
-  currentData.settings.stats = currentData.stats;
   
   renderStats();
   closeStatModal();
   showSuccess('تم حفظ الإحصائية بنجاح');
-  localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
+  console.log('[Panel] Saving stat, currentData:', currentData);
   localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
@@ -602,12 +594,9 @@ function editStat(index) {
 
 function deleteStat(index) {
   if (confirm('هل أنت متأكد من حذف هذه الإحصائية؟')) {
-    currentData.stats.splice(index, 1);
-    if (!currentData.settings) currentData.settings = {};
-    currentData.settings.stats = currentData.stats;
+    currentData.settings.stats.splice(index, 1);
     renderStats();
     showSuccess('تم حذف الإحصائية');
-    localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
     localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   }
 }
@@ -649,14 +638,10 @@ function buildJSON() {
   saveSettings();
   saveContactInfo();
   
-  const settings = currentData.settings || {};
-  settings.stats = currentData.stats || [];
-  settings.services = currentData.services || [];
-  
   return {
     site: currentData.site,
     projects: currentData.projects,
-    settings: settings
+    settings: currentData.settings
   };
 }
 
