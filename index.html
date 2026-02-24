@@ -3,21 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elgml - صوت احترافي وإنتاج إعلاني</title>
-  <meta name="description" content="مقدم أصوات احترافي وخبير إنتاج إعلاني وفنان أفلام ذكي. استمع إلى أحدث الأعمال والخدمات الاحترافية.">
-  <meta name="keywords" content="voiceover, صوت, إعلان, ad production, أفلام, AI, صوت احترافي">
-  <meta property="og:title" content="Elgml - صوت احترافي">
-  <meta property="og:description" content="مقدم أصوات احترافي وخبير إنتاج إعلاني وفنان أفلام ذكي">
-  <meta property="og:type" content="website">
-  
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/modern.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elgml | مونتير وصانع إعلانات وأفلام بالذكاء الاصطناعي</title>
   <meta name="description" content="مونتير محترف، صانع إعلانات وأفلام بالذكاء الاصطناعي. أعمال إبداعية، مونتاج فيديو، إنتاج إعلاني، تصميم صوتي ومرئي.">
   <meta name="keywords" content="مونتير, صانع إعلانات, أفلام, ذكاء اصطناعي, مونتاج, فيديو, AI, Elgml">
@@ -27,11 +12,12 @@
 </head>
 <body>
   <div id="bg3d"></div>
+  
   <!-- Navbar -->
   <nav class="navbar ai-navbar">
     <div class="nav-container">
-      <a href="#home" class="logo-img-link" style="display:flex;align-items:center;gap:10px;">
-        <img src="images/logo-elgml.png" alt="Elgml Logo" class="logo-img" style="height:48px;max-width:160px;object-fit:contain;filter:drop-shadow(0 2px 8px #0008);border-radius:12px;">
+      <a href="#home" class="logo-img-link" style="display:flex;align-items:center;">
+        <img src="images/logo-elgml.png" alt="Elgml Logo" class="logo-img">
       </a>
       <ul class="nav-menu">
         <li><a href="#home" class="nav-link active">الرئيسية</a></li>
@@ -45,9 +31,9 @@
 
   <!-- Hero Section -->
   <section class="hero ai-hero" id="home">
-    <div class="hero-content" style="margin-top:60px;">
+    <div class="hero-content">
       <div class="ai-hero-bg-glass">
-        <img src="images/logo-elgml.png" alt="Elgml Logo" style="max-width:220px;width:90%;margin:0 auto 18px;display:block;filter:drop-shadow(0 8px 32px #ffdfb0cc);border-radius:18px;">
+        <img src="images/logo-elgml.png" alt="Elgml Logo" class="hero-logo">
         <h1 class="hero-title ai-title" id="site-title">Elgml | مونتير وAI Creator</h1>
         <p class="hero-subtitle ai-lead" id="site-subtitle">مونتاج فيديو احترافي، إعلانات ذكية، أفلام إبداعية بالذكاء الاصطناعي</p>
         <button class="cta-btn ai-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">ابدأ مشروعك الآن</button>
@@ -147,9 +133,9 @@
     <div class="container">
       <p>&copy; 2026 Elgml. جميع الحقوق محفوظة. | تصميم وتنفيذ Elgml AI Studio</p>
       <div class="ai-socials">
-        <a href="#" title="Behance" class="ai-social-link">&#xf1b4;</a>
-        <a href="#" title="YouTube" class="ai-social-link">&#xf167;</a>
-        <a href="#" title="Instagram" class="ai-social-link">&#xf16d;</a>
+        <a href="#" title="Behance" class="ai-social-link">🎨</a>
+        <a href="#" title="YouTube" class="ai-social-link">🎥</a>
+        <a href="#" title="Instagram" class="ai-social-link">📸</a>
       </div>
     </div>
   </footer>
@@ -159,23 +145,7 @@
     <div class="modal-content">
       <span class="close" onclick="document.getElementById('videoModal').style.display='none'">&times;</span>
       <div class="modal-body">
-        <video id="modalVideo" controls style="width: 100%; height: auto; border-radius: 10px;">
-          <source src="" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/three-bg.js"></script>
-  <script src="js/modern.js"></script>
-</body>
-</html>
-        <video id="modalVideo" controls style="width: 100%; height: auto; border-radius: 10px;">
+        <video id="modalVideo" controls>
           <source src="" type="video/mp4">
           Your browser does not support the video tag.
         </video>
