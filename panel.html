@@ -1,41 +1,464 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>لوحة التحكم — Elgml</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <style>
-      .field{margin-bottom:10px}
-      label{display:block;margin-bottom:6px}
-      input[type=text], textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
-      .btn{display:inline-block;padding:8px 12px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none}
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>لوحة تحكم المحتوى (مؤقتة)</h2>
-      <p>يمكنك تعديل بيانات الموقع هنا ثم تنزيل ملف JSON لتدفعه إلى المستودع.</p>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة التحكم — Elgml</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      <div id="site-meta" class="card">
-        <h4>بيانات الموقع</h4>
-        <div class="field"><label>اسم البراند</label><input id="brand" type="text"></div>
-        <div class="field"><label>جملة تعريفية</label><input id="lead" type="text"></div>
-        <div class="field"><label>بريد التواصل</label><input id="email" type="text"></div>
-      </div>
+    :root {
+      --primary: #ff6b6b;
+      --secondary: #4ecdc4;
+      --dark: #0a0e27;
+      --darker: #050812;
+      --light: #e0e6ff;
+      --text: #c9d6e8;
+      --card-bg: rgba(13, 20, 45, 0.6);
+    }
 
-      <div id="projects" class="card">
-        <h4>المشاريع</h4>
-        <div id="projects-list"></div>
-        <p><button id="add-project" class="btn">أضف مشروع جديد</button></p>
-      </div>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-      <p>
-        <button id="download-json" class="btn">تنزيل JSON جاهز للرفع</button>
-        <a href="index.html" class="btn" style="background:#333;margin-right:8px">عرض الموقع</a>
-      </p>
+    .panel-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .panel-header {
+      background: linear-gradient(90deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .panel-header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .panel-header p {
+      opacity: 0.8;
+    }
+
+    .panel-section {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 107, 107, 0.1);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--light);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 107, 107, 0.15);
+      background: rgba(20, 30, 60, 0.6);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(20, 30, 60, 0.8);
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--primary), #ff8787);
+      color: white;
+      box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(78, 205, 196, 0.2);
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(78, 205, 196, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: rgba(255, 100, 100, 0.2);
+      color: #ff6464;
+      border: 1px solid #ff6464;
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 100, 100, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .project-item {
+      background: rgba(20, 30, 60, 0.4);
+      border: 1px solid rgba(78, 205, 196, 0.15);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .project-index {
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .field-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--darker);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 107, 107, 0.1);
+    }
+
+    .modal-header h2 {
+      color: var(--light);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .close-modal:hover {
+      opacity: 1;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .button-group .btn {
+      flex: 1;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(78, 205, 196, 0.1);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      opacity: 0.6;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .success-message {
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid #4caf50;
+      color: #81c784;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header {
+        padding: 20px;
+      }
+
+      .panel-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .project-actions {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .project-actions .btn {
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="panel-container">
+    <!-- Header -->
+    <div class="panel-header">
+      <h1>🎛️ لوحة التحكم</h1>
+      <p>إدارة محتوى موقعك Elgml بسهولة وسرعة</p>
     </div>
 
-    <script src="js/panel.js"></script>
-  </body>
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">✓ تم الحفظ بنجاح!</div>
+
+    <!-- Site Meta Section -->
+    <div class="panel-section">
+      <h2 class="section-title">📋 بيانات الموقع</h2>
+      <div class="stats-row" id="statsRow"></div>
+      
+      <div class="form-group">
+        <label>اسم البراند</label>
+        <input type="text" id="brand" placeholder="مثال: Elgml">
+      </div>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>الجملة التعريفية</label>
+          <input type="text" id="lead" placeholder="وصف مختصر لخدماتك">
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveSiteMeta()">💾 حفظ بيانات الموقع</button>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="panel-section">
+      <h2 class="section-title">🎬 إدارة المشاريع</h2>
+      
+      <div id="projects-list"></div>
+      
+      <div class="empty-state" id="emptyProjects" style="display:none;">
+        <div class="empty-state-icon">📹</div>
+        <p>لا توجد مشاريع حتى الآن</p>
+      </div>
+
+      <button class="btn btn-primary" onclick="openProjectModal(null)" style="margin-top: 20px;">➕ أضف مشروع جديد</button>
+    </div>
+
+    <!-- Export Section -->
+    <div class="panel-section">
+      <h2 class="section-title">📤 التصدير والإجراءات</h2>
+      
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="downloadJSON()">⬇️ تحميل JSON</button>
+        <button class="btn btn-secondary" onclick="uploadJSON()">⬆️ استيراد JSON</button>
+        <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="handleFileUpload(event)">
+        <button class="btn btn-secondary" onclick="backupData()">💾 عمل نسخة احتياطية</button>
+        <a href="index.html" class="btn btn-secondary">👁️ عرض الموقع</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div class="modal-overlay" id="projectModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">أضف مشروع جديد</h2>
+        <button class="close-modal" onclick="closeProjectModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label>عنوان المشروع</label>
+        <input type="text" id="projectTitle" placeholder="مثال: إعلان منتج X">
+      </div>
+
+      <div class="form-group">
+        <label>وصف المشروع</label>
+        <textarea id="projectDesc" placeholder="اكتب وصفاً قصيراً للمشروع..."></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label>اسم ملف الفيديو (بدون امتداد)</label>
+          <input type="text" id="projectVideo" placeholder="project1">
+        </div>
+        <div class="form-group">
+          <label>اسم ملف الصورة (بدون امتداد)</label>
+          <input type="text" id="projectPoster" placeholder="thumb1">
+        </div>
+      </div>
+
+      <p style="font-size: 0.85rem; opacity: 0.6; margin-top: 10px;">
+        💡 الفيديوهات تُحفظ في <code>videos/</code> والصور في <code>images/</code>
+      </p>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="saveProject()">✓ حفظ المشروع</button>
+        <button class="btn btn-secondary" onclick="closeProjectModal()">✕ إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/panel.js"></script>
+</body>
 </html>
