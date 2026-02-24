@@ -1,66 +1,157 @@
-<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Elgml — بورتفوليو</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container">
-        <h1 class="brand">Elgml</h1>
-        <nav class="nav">
-          <a href="#about">من أنا</a>
-          <a href="#services">خدمات</a>
-          <a href="#works">أعمالي</a>
-          <a href="#contact">تواصل</a>
-        </nav>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elgml - صوت احترافي وإنتاج إعلاني</title>
+  <meta name="description" content="مقدم أصوات احترافي وخبير إنتاج إعلاني وفنان أفلام ذكي. استمع إلى أحدث الأعمال والخدمات الاحترافية.">
+  <meta name="keywords" content="voiceover, صوت, إعلان, ad production, أفلام, AI, صوت احترافي">
+  <meta property="og:title" content="Elgml - صوت احترافي">
+  <meta property="og:description" content="مقدم أصوات احترافي وخبير إنتاج إعلاني وفنان أفلام ذكي">
+  <meta property="og:type" content="website">
+  
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/modern.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="bg3d"></div>
+  
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <span class="logo-text">ELGML</span>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link active">الرئيسية</a></li>
+        <li><a href="#about" class="nav-link">من أنا</a></li>
+        <li><a href="#services" class="nav-link">الخدمات</a></li>
+        <li><a href="#portfolio" class="nav-link">أعمالي</a></li>
+        <li><a href="#contact" class="nav-link">التواصل</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    <section class="hero">
-      <div class="container">
-        <h2>معلق، صانع إعلانات ومُخرج أفلام باستخدام الذكاء الاصطناعي</h2>
-        <p class="lead">أنا Elgml — أبتكر محتوى بصري وصوتي جذاب باستخدام أدوات الذكاء الاصطناعي.</p>
-        <a class="cta" href="#works">شاهد أعمالي</a>
-      </div>
-    </section>
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1 class="hero-title" id="site-title">مرحبا أنا Elgml</h1>
+      <p class="hero-subtitle" id="site-subtitle">مقدم أصوات احترافي | منتج إعلاني | فنان أفلام ذكي</p>
+      <button class="cta-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">ابدأ المحادثة</button>
+    </div>
+  </section>
 
-    <main class="container main">
-      <section id="about" class="card">
-        <h3>من أنا</h3>
-        <p>معلق صوتي ومخرج إعلانات وأفلام بالذكاء الاصطناعي. أعمل على تحويل الأفكار لقِصَص بصرية وقصص صوتية احترافية.</p>
-      </section>
-
-      <section id="services" class="card">
-        <h3>الخدمات</h3>
-        <ul>
-          <li>تعليق صوتي احترافي</li>
-          <li>إنتاج إعلانات قصيرة ومحتوى ترويجي</li>
-          <li>إخراج وتحرير أفلام قصيرة باستخدام أدوات AI</li>
-        </ul>
-      </section>
-
-      <section id="works" class="card">
-        <h3>أعمالي</h3>
-        <div id="works-grid" class="grid">
-          <!-- تصيير المشاريع سيتم عبر JavaScript من البيانات في data/content.json -->
+  <!-- About Section -->
+  <section class="section alt" id="about">
+    <div class="container">
+      <h2 class="section-title">عني</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>مرحبا! أنا متخصص في تقديم الأصوات الاحترافية والإنتاج الإعلاني. لدي خبرة واسعة في إنتاج محتوى عالي الجودة باستخدام أحدث التقنيات والأدوات.</p>
+          <p>أساعد العلامات التجارية والشركات على إيصال رسالتهم بطريقة احترافية وفعالة من خلال الصوت والفيديو والإنتاج الإعلاني المبتكر.</p>
         </div>
-      </section>
-
-      <section id="contact" class="card">
-        <h3>تواصل</h3>
-        <p>للتعاون أو طلبات العمل: <a href="mailto:mohamedelgamal723@gmail.com">mohamedelgamal723@gmail.com</a></p>
-        <p>أو تواصل عبر حسابات التواصل الاجتماعي أدناه.</p>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <small>© Elgml — جميع الحقوق محفوظة</small>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">مشروع متكامل</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">رضا العملاء</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">سنوات خبرة</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">متوفر للدعم</span>
+          </div>
+        </div>
       </div>
-    </footer>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section" id="services">
+    <div class="container">
+      <h2 class="section-title">الخدمات</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">🎙️</span>
+          <h3>تقديم أصوات احترافي</h3>
+          <p>أقدم أصواتا احترافية لإعلاناتك ومشاريعك الخاصة مع جودة صوتية عالية جدا.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">📹</span>
+          <h3>إنتاج إعلاني</h3>
+          <p>أخطط وأنتج إعلانات احترافية تحقق أهدافك التسويقية بفعالية عالية.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🎬</span>
+          <h3>إنتاج أفلام ذكية</h3>
+          <p>أستخدم تقنيات الذكاء الاصطناعي لإنتاج أفلام مبتكرة وجذابة.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">✨</span>
+          <h3>تحرير وتأثيرات</h3>
+          <p>أضيف تأثيرات بصرية وصوتية احترافية تجعل محتواك متميزا.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section class="section alt" id="portfolio">
+    <div class="container">
+      <h2 class="section-title">أحدث الأعمال</h2>
+      <div class="portfolio-grid" id="portfolio-grid">
+        <!-- Portfolio items will be loaded here from JSON -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">تواصل معي</h2>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <a href="mailto:mohamedelgamal723@gmail.com" id="contact-email">mohamedelgamal723@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🎛️</span>
+          <a href="panel.html" target="_blank">لوحة التحكم</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Elgml. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <!-- Video Modal/Lightbox -->
+  <div class="modal" id="videoModal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('videoModal').style.display='none'">&times;</span>
+      <div class="modal-body">
+        <video id="modalVideo" controls style="width: 100%; height: auto; border-radius: 10px;">
+          <source src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="js/app.js"></script>
-  </body>
+  <script src="js/three-bg.js"></script>
+  <script src="js/modern.js"></script>
+</body>
 </html>
