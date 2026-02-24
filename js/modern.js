@@ -5,8 +5,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load site content from content.json and update all sections (AI/Editor Theme)
     async function loadSiteContent() {
       try {
-        const res = await fetch('data/content.json', {cache: 'no-store'});
-        const data = await res.json();
+        // Try to load from localStorage first (fresh changes from panel)
+        let data = null;
+        const savedData = localStorage.getItem('elgml_backup');
+        if (savedData) {
+          try {
+            data = JSON.parse(savedData);
+          } catch(e) {}
+        }
+        
+        // If no saved data, load from content.json
+        if (!data) {
+          const res = await fetch('data/content.json', {cache: 'no-store'});
+          data = await res.json();
+        } else {
+          // Also fetch fresh content.json to merge with localStorage data
+          try {
+            const res = await fetch('data/content.json', {cache: 'no-store'});
+            const freshData = await res.json();
+            // Merge: prefer localStorage data, fallback to content.json
+            if (!data.site) data.site = freshData.site;
+            if (!data.settings) data.settings = freshData.settings;
+            if (!data.projects) data.projects = freshData.projects;
+          } catch(e) {
+            // Use only localStorage data if fetch fails
+          }
+        }
         // Navbar logo (image only)
         if (data.site && data.site.logo) {
           let navImg = document.querySelector('.logo-img');

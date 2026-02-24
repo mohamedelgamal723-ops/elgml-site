@@ -73,11 +73,26 @@ function handleLogout() {
   }
 }
 
-// Load data from JSON
+// Load data from localStorage first, then from content.json
 async function load() {
   try {
-    const res = await fetch('data/content.json', {cache: 'no-store'});
-    currentData = await res.json();
+    // Try to load from localStorage first (saved data)
+    const savedData = localStorage.getItem('elgml_backup');
+    if (savedData) {
+      try {
+        currentData = JSON.parse(savedData);
+      } catch(e) {
+        // If localStorage is corrupted, load from content.json
+        const res = await fetch('data/content.json', {cache: 'no-store'});
+        currentData = await res.json();
+      }
+    } else {
+      // If no saved data, load from content.json
+      const res = await fetch('data/content.json', {cache: 'no-store'});
+      currentData = await res.json();
+      // Save it to localStorage for next time
+      localStorage.setItem('elgml_backup', JSON.stringify(currentData));
+    }
     
     el('#brand').value = currentData.site.brand || 'Elgml';
     el('#lead').value = currentData.site.lead || '';
@@ -113,6 +128,7 @@ async function load() {
         currentData.site.logo = logoDataUrl;
         showSuccess('تم حفظ الشعار بنجاح');
         localStorage.setItem('elgml_site_logo', logoDataUrl);
+        localStorage.setItem('elgml_backup', JSON.stringify(currentData));
       } else {
         alert('يرجى اختيار صورة شعار أولاً');
       }
@@ -286,6 +302,8 @@ function saveSiteMeta() {
   // logo is handled separately
   updateStats();
   showSuccess('تم حفظ بيانات الموقع');
+  // Save to localStorage so changes appear immediately
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   localStorage.setItem('elgml_site_meta', JSON.stringify(currentData));
 }
 
@@ -318,6 +336,7 @@ function saveSettings() {
   };
   showSuccess('تم حفظ الإعدادات بنجاح! قد تحتاج لتحديث الصفحة الرئيسية');
   localStorage.setItem('elgml_settings', JSON.stringify(currentData.settings));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
 // Open project modal for adding new project
@@ -385,6 +404,7 @@ function saveProject() {
   closeProjectModal();
   showSuccess('تم حفظ المشروع بنجاح');
   localStorage.setItem('elgml_projects', JSON.stringify(currentData.projects));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
 // Edit project
@@ -400,6 +420,7 @@ function deleteProject(index) {
     updateStats();
     showSuccess('تم حذف المشروع');
     localStorage.setItem('elgml_projects', JSON.stringify(currentData.projects));
+    localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   }
 }
 
@@ -460,6 +481,7 @@ function saveService() {
   closeServiceModal();
   showSuccess('تم حفظ الخدمة بنجاح');
   localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
 function editService(index) {
@@ -472,6 +494,7 @@ function deleteService(index) {
     renderServices();
     showSuccess('تم حذف الخدمة');
     localStorage.setItem('elgml_services', JSON.stringify(currentData.services));
+    localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   }
 }
 
@@ -528,6 +551,7 @@ function saveStat() {
   closeStatModal();
   showSuccess('تم حفظ الإحصائية بنجاح');
   localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
 function editStat(index) {
@@ -540,6 +564,7 @@ function deleteStat(index) {
     renderStats();
     showSuccess('تم حذف الإحصائية');
     localStorage.setItem('elgml_stats', JSON.stringify(currentData.stats));
+    localStorage.setItem('elgml_backup', JSON.stringify(currentData));
   }
 }
 
@@ -558,6 +583,7 @@ function saveContactInfo() {
   
   showSuccess('تم حفظ بيانات التواصل بنجاح');
   localStorage.setItem('elgml_contact', JSON.stringify(currentData.settings.contact));
+  localStorage.setItem('elgml_backup', JSON.stringify(currentData));
 }
 
 // Show success message
